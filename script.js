@@ -111,16 +111,27 @@ function canvasClicked() {
     y: mouseY,
   };
 
-  if(state === "collection") {
-    let targetLabel = notesRadio value();
-    let target = {
-      label: targetlabel;
-    };
-  }else if(state === "prediction") {
-
-  }
+ if(state === "collection") {
+  let targetLabel = notesRadio.value();
+  let target = {
+    label: targetLabel
+  };
+  model.addData(inputs, target);
+  drawNote(targetLabel, "black", "white");
+  wave.freq(notes[targetLabel]);
+  env.play();
+} else if(state === "prediction") {
+  model.classify(inputs, gotResults);
+}
 }
 
 function gotResults(error, results) {
-
+  if(error) {
+    console.error(error);
+  }else {
+    let label = results[0].label;
+    drawNote(label, "white", "blue");
+    wave.freq(notes[label]);
+    env.play();
+  }
 }
